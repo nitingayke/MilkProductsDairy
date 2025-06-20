@@ -115,4 +115,25 @@ export const addNewOrder = async (req, res) => {
 
 export const getAllUserOrders = async (req, res) => {
   const { userId } = req.body;
+
+  const user = await User.findById(userId).populate({
+    path: "orders",
+    populate: [
+      { path: "address" }, // Populate address inside each order
+      {
+        path: "productsData.productId", // Deep populate each product
+        model: "Product", // Assuming your model name is "Product"
+      },
+    ],
+  });
+
+  if (!user) {
+    return res.status(404).json({ success: false, message: "User not found" });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "User orders retrieved",
+    orders: user.orders,
+  });
 }

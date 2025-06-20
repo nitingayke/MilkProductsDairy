@@ -36,13 +36,11 @@ export const addNewProduct = async (req, res) => {
 
   await newProduct.save();
 
-  res
-    .status(200)
-    .json({
-      success: true,
-      message: "New Product Created Successfully",
-      product: newProduct,
-    });
+  res.status(200).json({
+    success: true,
+    message: "New Product Created Successfully",
+    product: newProduct,
+  });
 };
 
 export const updateProduct = async (req, res) => {
@@ -64,7 +62,9 @@ export const updateProduct = async (req, res) => {
   }
 
   if (updatedProductData?.name && updatedProductData?.name !== product?.name) {
-    const nameExists = await Product.findOne({ name: updatedProductData?.name });
+    const nameExists = await Product.findOne({
+      name: updatedProductData?.name,
+    });
     if (nameExists) {
       return res
         .status(400)
@@ -77,7 +77,7 @@ export const updateProduct = async (req, res) => {
     { $set: updatedProductData },
     { new: true }
   );
- 
+
   if (!updatedProduct) {
     return res
       .status(404)
@@ -89,4 +89,21 @@ export const updateProduct = async (req, res) => {
     message: "Product updated successfully",
     product: updatedProduct,
   });
+};
+
+export const removeProduct = async (req, res) => {
+  let { _id } = req.body;
+
+  if (!_id) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Product id missing" });
+  }
+
+  await Product.findByIdAndDelete(_id);
+  console.log("Product removed successfully ")
+
+  res
+    .status(200)
+    .json({ success: true, message: "Product removed successfully" });
 };

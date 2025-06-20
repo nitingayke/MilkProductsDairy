@@ -113,7 +113,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row py-5 p-3 gap-5 max-w-5xl mx-auto">
+    <div className="flex flex-col md:flex-row py-5 p-3 gap-5 max-w-7xl mx-auto">
       <aside className="w-full md:w-1/4 bg-white dark:bg-gray-500/20 p-4 shadow-md overflow-y-hidden rounded-md">
         <div className="flex flex-col items-center mb-10 relative group">
           <div className="relative w-24 h-24">

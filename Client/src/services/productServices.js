@@ -7,7 +7,7 @@ export const getProducts = async () => {
 
 export const addNewProduct = async (productData) => {
   const res = await api.put(
-    "http://localhost:9000/inventory/add-product",
+    "/inventory/add-product",
     productData,
     {
       headers: { "Content-Type": "multipart/form-data" },
@@ -18,12 +18,19 @@ export const addNewProduct = async (productData) => {
 
 export const updateProduct = async (updatedProductData) => {
   const res = await api.put(
-    "http://localhost:9000/inventory/update-product",
+    "/inventory/update-product",
     updatedProductData,
     {
       headers: { "Content-Type": "multipart/form-data" },
     }
   );
+  return res.data;
+};
+
+export const removeProduct = async (productId) => {
+  const res = await api.post("/inventory/remove-product", {
+    _id : productId,
+  });
   return res.data;
 };
 

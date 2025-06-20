@@ -38,6 +38,8 @@ export default function OverallInventory({ totalCategories, totalStock, lowStock
       bg: "bg-blue-100 dark:bg-blue-800/30",
     },
   ];
+
+  
   return (
     <div className="bg-white dark:bg-gray-500/20 rounded-sm p-4">
       <h2 className="text-lg font-semibold mb-4"> Inventary Summary </h2>

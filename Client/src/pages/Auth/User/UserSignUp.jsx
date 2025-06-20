@@ -35,7 +35,7 @@ export default function UserSignUp() {
       setIsLoading(true);
 
       const res = await signupUser(formData);
-      if (res.status === 201 || res.status === 200) {
+      if (res?.success) {
         toast.success("OTP sent successfully");
         navigate("/signup/otp-verification", { state: { formData } });
         setFormData({ email: "", password: "", confirmPassword: "" });

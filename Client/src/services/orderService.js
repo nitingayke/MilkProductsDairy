@@ -6,6 +6,7 @@ export const placeNewOrder = async (orderData) => {
 };
 
 export const getUserOrders = async (userId) => {
-  const res = await api.get("/", { userId });
+  // console.log(userId)
+  const res = await api.post("/order/get-orders", { userId });
   return res.data;
 }

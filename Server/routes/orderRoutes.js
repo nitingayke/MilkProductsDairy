@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post("/add", wrapAsync(addNewOrder));
 
-router.get("/user", wrapAsync(getAllUserOrders));
+router.post("/get-orders", wrapAsync(getAllUserOrders));
 
 export default router;

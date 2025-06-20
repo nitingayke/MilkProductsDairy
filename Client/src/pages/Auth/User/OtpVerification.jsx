@@ -57,6 +57,7 @@ export default function OtpVerification() {
         toast.error("Something went wrong");
       }
     } catch (error) {
+      console.log(error)
       toast.error(error?.response?.data?.message || "User already exists or server error.");
     } finally {
       setLoading(false);

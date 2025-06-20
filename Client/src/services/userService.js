@@ -7,5 +7,5 @@ export const loginUser = async (email, password) => {
 
 export const signupUser = async (formData) => {
   const res = await api.post("/u/signup", formData);
-  return res;
+  return res.data;
 };

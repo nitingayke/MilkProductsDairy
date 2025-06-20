@@ -128,11 +128,12 @@ export default function ProfileInfoInput() {
               src={profileInfo.photo || "/default-avatar.png"}
               alt="Profile Preview"
               className="w-24 h-24 rounded-full object-cover border border-gray-300"
+
             />
             <label htmlFor="photoInput" className="absolute bottom-0 right-0 bg-white dark:bg-gray-200 rounded-full p-1 cursor-pointer border">
               <i className="fas fa-edit text-[#843E71]" />
             </label>
-            <input type="file" accept="image/*" id="photoInput" onChange={handlePhotoChange} className="hidden" />
+            <input type="file" accept="image/*" id="photoInput" onChange={handlePhotoChange} className="hidden"/>
           </div>
 
           {/* Input fields */}

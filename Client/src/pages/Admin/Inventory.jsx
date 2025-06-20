@@ -7,7 +7,6 @@ import { getExpiryStatusCounts, lowStockCount, outOfStockProducts, totalCategori
 
 export default function Inventory() {
   const [fetchedProducts, setFetchedProducts] = useState([])
-
   const fetchProducts = async () => {
     try {
       const dbProducts = await getProducts();
@@ -48,7 +47,7 @@ export default function Inventory() {
         />
       </div>
       <div className="p-3">
-        <ProductsList />
+        <ProductsList fetchProducts={fetchProducts} fetchedProducts={fetchedProducts} />
       </div>
     </>
   );

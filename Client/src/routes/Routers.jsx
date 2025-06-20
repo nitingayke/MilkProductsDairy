@@ -21,6 +21,7 @@ import OrderCheckoutPage from "../pages/OrderCheckoutPage"
 import Dashboard from "../pages/Admin/Dashboard";
 import Inventory from "../pages/Admin/Inventory";
 import Orders from "../pages/Admin/Orders";
+import OrderPage from "../pages/ProductPage"
 
 export default function Routers() {
     return (
@@ -39,7 +40,7 @@ export default function Routers() {
             <Route path="/admin/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
             <Route path="/admin/inventory" element={<AdminLayout><Inventory /></AdminLayout>} />
             <Route path="/admin/orders" element={<AdminLayout><Orders /></AdminLayout>} />
-
+            <Route path="/orders" element={<Layout><OrderPage/></Layout>}/>
 
             <Route path="/about" element={<Layout><AboutPage /></Layout>} />
             <Route path="/products/:productId?" element={<Layout><ProductPage /></Layout>} />

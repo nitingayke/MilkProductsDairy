@@ -1,13 +1,12 @@
-
 // import React, { useState } from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { updateProduct } from "../../../services/productServices";
+import { addNewProduct } from "../../../../services/productServices";
 import { Image, Tag, DollarSign, Archive, Package, AlertCircle, Scale3D, FlaskConical } from "lucide-react";
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ScienceIcon from '@mui/icons-material/Science';
 import DescriptionIcon from '@mui/icons-material/Description';
-import NutritionInput from "./NutritionalInfo";
+import NutritionInput from "../NutritionalInfo";
 
 const categories = [
   "Milk",
@@ -33,10 +32,9 @@ const categories = [
 const quantityUnits = ["Litre", "Ml", "Kg", "Gram", "Pack"];
 
 
-export default function UpdateProductModel({ setUpdateModel, selectedProduct }) {
+export default function AddProductModal({ setAddModel }) {
 
   const [productDetails, setProductDetails] = useState({
-    _id: selectedProduct._id,
     name: "",
     category: "",
     description: "",
@@ -51,32 +49,7 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
   })
   const [selectedFile, setSelectedFile] = useState(null)
   const [isAdding, setIsAdding] = useState(false);
-  const [previewImage, setPreviewImage] = useState(
-    typeof productDetails?.image === "string"
-      ? productDetails.image
-      : productDetails?.image?.[0]?.url || ""
-  );
 
-  useEffect(() => {
-    if (selectedProduct) {
-      setProductDetails({
-        _id: selectedProduct._id,
-        name: selectedProduct.name || "",
-        category: selectedProduct.category || "",
-        description: selectedProduct.description || "",
-        image: selectedProduct.image?.[0] || "",
-        shelfLife: selectedProduct.shelfLife || 0,
-        quantityUnit: selectedProduct.quantityUnit || "",
-        stock: selectedProduct.stock || 0,
-        thresholdVal: selectedProduct.thresholdVal || 0,
-        price: selectedProduct.price || 0,
-        nutrition: selectedProduct.nutrition || {},
-        discount: selectedProduct.discount || 0,
-      });
-    }
-  }, [selectedProduct]);
-
-  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -89,34 +62,29 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setPreviewImage(imageURL);
-
+      setSelectedFile(file);
       setProductDetails((prev) => ({
         ...prev,
-        image: imageURL, // keep file for backend
-      }));
-
-      setSelectedFile(file);
+        image: URL.createObjectURL(file)
+      }
+      ));
     }
   };
 
-
   const validateInputs = () => {
-    const { name, category, price, image, stock, quantityUnit, thresholdVal, shelfLife, discount, description, nutrition } = productDetails;
-    if (!name || !category || !price || !image || !stock || !quantityUnit || !thresholdVal || !shelfLife || !nutrition || !discount || !description) {
-      // console.log()
+    const { name, category, price, stock, quantityUnit, thresholdVal, shelfLife, nutrition, discount, description } = productDetails;
+    if (!name || !category || !price || !stock || !quantityUnit || !thresholdVal || !selectedFile || !shelfLife || !nutrition || !discount || !description) {
       toast.error("Please fill all fields and select an image.");
       return false;
     }
-    if (isNaN(price) || isNaN(stock) || isNaN(thresholdVal) || isNaN(discount) || isNaN(shelfLife)) {
+    if (isNaN(price) || isNaN(stock) || isNaN(thresholdVal) || isNaN(discount) || isNaN(shelfLife) ) {
       toast.error("Price, Stock, Discount, Shelflife and Threshold should be numbers.");
       return false;
     }
     return true;
   };
 
-  const handleUpdateProduct = async (e) => {
+  const handleAddProduct = async (e) => {
     e.preventDefault();
     if (!validateInputs()) return;
 
@@ -124,18 +92,16 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
       setIsAdding(true)
       e.preventDefault()
 
-      const updatedProductData = new FormData();
+      const productData = new FormData();
 
-      updatedProductData.append("image", selectedFile)
-      updatedProductData.append("updatedProductData", JSON.stringify(productDetails))
+      productData.append("image", selectedFile)
+      productData.append("productDetails", JSON.stringify(productDetails))
 
-      const res = await updateProduct(updatedProductData);
+      const res = await addNewProduct(productData);
 
       if (res?.success) {
-        toast.success("Product Updated Successfully");
-        console.log(res?.product)
+        toast.success("Product Added successfully");
       } else {
-        console.log
         toast.error(res.message);
       }
 
@@ -143,34 +109,27 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
       console.log(error)
       toast.error("Product already exist. Add other product")
     } finally {
-      setUpdateModel(false)
+      setAddModel(false)
       setIsAdding(false)
     }
   }
+
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm p-4 flex flex-col items-center  overflow-auto">
       <div className="bg-white dark:bg-gray-500/20 p-6 sm:p-8 rounded-xl shadow-xl w-full max-w-4xl animate-fadeIn space-y-4">
         <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">
-          🧾 Update the Product
+          🧾 Add New Product
         </h2>
 
-        <form onSubmit={handleUpdateProduct} className="space-y-6 text-sm sm:text-base">
+        <form onSubmit={handleAddProduct} className="space-y-6 text-sm sm:text-base">
           {/* Image upload */}
           <div className="relative w-24 h-24 mx-auto">
             <img
-              src={
-                previewImage ||
-                (typeof productDetails.image === "string"
-                  ? productDetails.image
-                  : productDetails.image?.url) || // if stored as { url: '...' }
-                "https://img.freepik.com/free-vector/dairy-products-poster_1284-18867.jpg?semt=ais_hybrid&w=740"
-              }
+              src={productDetails?.image || "https://img.freepik.com/free-vector/dairy-products-poster_1284-18867.jpg?semt=ais_hybrid&w=740"}
               alt="Product Preview"
-              className={`w-24 h-24 rounded-xl object-cover border ${isAdding ? "cursor-not-allowed opacity-50" : ""
-                }`}
+              className={`${isAdding ? "cursor-not-allowed" : null} w-24 h-24 rounded-xl object-cover border opacity-50`}
             />
-
             <label htmlFor="photoInput" className="absolute bottom-0 right-0 bg-white border p-1 rounded-full cursor-pointer">
               <Image className="w-5 h-5 text-blue-600" />
             </label>
@@ -180,6 +139,7 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
               id="photoInput"
               name="image"
               className="hidden"
+
               onChange={handlePhotoChange}
             />
           </div>
@@ -188,7 +148,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-6">
             <div className="w-1/2">
               <InputWithLabel
-                value={productDetails?.name}
                 label="Product Name"
                 name="name"
                 placeholder="Ex: Milk"
@@ -208,7 +167,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
               <select
                 id="category"
                 name="category"
-                value={productDetails?.category}
                 onChange={handleInputChange}
                 defaultValue=""
 
@@ -238,7 +196,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
               <textarea
                 type="text"
                 name="description"
-                value={productDetails?.description}
                 rows={5}
                 cols={40}
                 placeholder="Enter something product"
@@ -250,7 +207,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
 
           {/* Nutrition Input  */}
           <NutritionInput
-            value={productDetails?.nutrition}
             onChange={(nutritionData) =>
               setProductDetails((prev) => ({
                 ...prev,
@@ -263,7 +219,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-6">
             <div className="w-1/2">
               <InputWithLabel
-                value={productDetails?.shelfLife}
                 label="Product's Shelflife"
                 name="shelfLife"
                 placeholder="Ex: 4 Days"
@@ -273,7 +228,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
             </div>
             <div className="w-1/2">
               <InputWithLabel
-                value={productDetails.price}
                 label="Selling Price (₹)"
                 name="price"
                 placeholder="Ex: 50"
@@ -287,7 +241,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-6 ">
             <div className="w-1/2">
               <InputWithLabel
-                value={productDetails.stock}
                 label="Stock"
                 name="stock"
                 placeholder="Ex: 100"
@@ -308,7 +261,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
                 <select
                   id="quantityUnit"
                   name="quantityUnit"
-                  value={productDetails?.quantityUnit}
                   onChange={handleInputChange}
                   defaultValue=""
 
@@ -338,7 +290,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-6">
             <div className="w-1/2">
               <InputWithLabel
-                value={productDetails?.thresholdVal}
                 label="Threshold Value"
                 name="thresholdVal"
                 placeholder="Ex: 10"
@@ -348,7 +299,6 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
             </div>
             <div className="w-1/2">
               <InputWithLabel
-                value={productDetails?.discount}
                 label="Discount (%)"
                 name="discount"
                 placeholder="Ex: 10%"
@@ -362,7 +312,7 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
           <div className="flex justify-between mt-6">
             <button
               type="button"
-              onClick={() => setUpdateModel(false)}
+              onClick={() => setAddModel(false)}
               className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               Cancel
@@ -372,7 +322,7 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
 
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              {isAdding ? "Updating..." : "Update Product"}
+              {isAdding ? "Adding..." : "Add Product"}
             </button>
           </div>
         </form>
@@ -382,7 +332,7 @@ export default function UpdateProductModel({ setUpdateModel, selectedProduct }) 
 }
 
 // 🧩 Reusable input with label and icon
-function InputWithLabel({ label, name, placeholder, icon, onChange, isAdding, value }) {
+function InputWithLabel({ label, name, placeholder, icon, onChange, isAdding }) {
   return (
     <div>
       <label className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-1">
@@ -393,7 +343,6 @@ function InputWithLabel({ label, name, placeholder, icon, onChange, isAdding, va
         <input
           type="text"
           name={name}
-          value={value}
           placeholder={placeholder}
           className={`${isAdding ? " cursor-not-allowed" : null} flex-1 bg-transparent focus:outline-none text-gray-900 dark:text-white`}
           onChange={onChange}

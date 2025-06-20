@@ -1,49 +1,25 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useState } from 'react';
-import { getProducts } from '../../../services/productServices';
+// import { getProducts } from '../../../services/productServices';
 import { useEffect } from 'react';
-import UpdateProductModel from './UpdateProductModal';
-import AddProductModal from './AddProductModal';
+import UpdateProductModel from './Models/UpdateProductModal';
+import AddProductModal from './Models/AddProductModal';
+import RemoveModel from './Models/RemoveModel';
 
-export default function ProductsList() {
+export default function ProductsList({ fetchProducts, fetchedProducts }) {
   const [addModel, setAddModel] = useState(false)
   const [updateModel, setUpdateModel] = useState(false)
+  const [removeModel, setRemoveModel] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState({});
 
-  const [fetchedProducts, setFetchedProducts] = useState([])
-
-  const fetchProducts = async () => {
-    try {
-      const dbProducts = await getProducts();
-
-      setFetchedProducts(dbProducts?.products);
-    } catch (err) {
-      console.error("Error fetching products:", err);
-    }
-  };
-
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    if (!addModel || !removeModel || !updateModel) fetchProducts();
 
-  useEffect(() => {
-    if (!addModel) fetchProducts();
-  }, [addModel, updateModel]);
-
-  // const handleUpdateProduct = (product) => {
-  //   try {
-  //     setUpdateModel(true)
-  //     console.log(product)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }finally{
-  //     setUpdateModel(false)
-  //   }
-  // }
+  },);
 
 
   return (
-    <div className="bg-white dark:bg-gray-500/20 rounded-xl p-6 shadow-md w-full overflow-x-auto">
+    <div className="bg-white dark:bg-gray-500/20 rounded-xl p-6  shadow-md w-full overflow-x-auto">
       <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-5">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Products</h2>
         <div className="flex gap-2">
@@ -82,7 +58,7 @@ export default function ProductsList() {
           {fetchedProducts.map((product, index) => (
             <tr
               key={index}
-              className="border-b hover:bg-gray-50 dark:hover:bg-gray-700"
+              className="border-b hover:bg-gray-50 dark:hover:bg-gray-700 "
             >
               <td className="py-2 px-3 font-medium text-gray-700 dark:text-white">
                 {product.name}
@@ -91,15 +67,25 @@ export default function ProductsList() {
               <td className="py-2 px-3">{product.stock} {" "} {product.quantityUnit}</td>
               <td className="py-2 px-3">{product.thresholdVal}{" "} {product.quantityUnit}</td>
               <td className="py-2 px-3">{product.category}</td>
-              <td className="py-2 px-3">
-                <button 
-                onClick={() => {
-                  setSelectedProduct(product)
-                  setUpdateModel(true)
-                }} 
-                className="text-sm bg-green-200 text-black dark:bg-blue-800/40 dark:hover:bg-blue-800/50 dark:text-white  px-3 py-1 rounded-md hover:bg-green-300/80">
-                  Update
-                </button>
+              <td className="py-2">
+                <div className='flex gap-x-2.5'>
+                  <button
+                    onClick={() => {
+                      setSelectedProduct(product)
+                      setUpdateModel(true)
+                    }}
+                    className="text-sm bg-green-200 text-black dark:bg-blue-800/40 dark:hover:bg-blue-800/50 dark:text-white  px-3 py-1 rounded-md hover:bg-green-300/80">
+                    Update
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedProduct(product)
+                      setRemoveModel(true)
+                    }}
+                    className="text-sm bg-red-200 text-black dark:bg-blue-800/40 dark:hover:bg-blue-800/50 dark:text-white  px-3 py-1 rounded-md hover:bg-red-300/80">
+                    Remove
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
@@ -119,7 +105,11 @@ export default function ProductsList() {
       )}
 
       {updateModel && (
-        <UpdateProductModel setUpdateModel={setUpdateModel}  selectedProduct={selectedProduct}/>
+        <UpdateProductModel setUpdateModel={setUpdateModel} selectedProduct={selectedProduct} />
+      )}
+
+      {removeModel && (
+        <RemoveModel setRemoveModel={setRemoveModel} selectedProduct={selectedProduct} />
       )}
     </div>
   );

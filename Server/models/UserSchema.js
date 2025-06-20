@@ -7,7 +7,6 @@ const UserSchema = new mongoose.Schema(
       minlength: 5,
       maxlength: 15,
       trim: true,
-      unique: true,
     },
 
     email: {
@@ -64,6 +63,11 @@ const UserSchema = new mongoose.Schema(
     gender: {
       type: String,
       enum: ["Male", "Female", "Other"],
+    },
+
+    wishlistedProducts : {
+      type : mongoose.Types.ObjectId,
+      ref : "Product"
     },
 
     orders: [
