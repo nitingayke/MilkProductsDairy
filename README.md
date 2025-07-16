@@ -58,7 +58,7 @@
 
 ## 🌐 Hosted Links
 
-- 🚀 **Frontend**: [https://milk-products-dairy.vercel.app/](https://milk-products-dairy.vercel.app)
+- 🚀 **Frontend**: [https://milk-products-dairy.vercel.app/](https://madhur-dairy-and-daily-needs.vercel.app/)
 - 🌐 **Backend**: [https://madhur-dairy-daily-need-server-1eu6.onrender.com](https://madhur-dairy-daily-need-server-1eu6.onrender.com)
 
 ---
