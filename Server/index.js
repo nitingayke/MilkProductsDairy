@@ -28,6 +28,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://milk-products-dairy-kappa.vercel.app",
+      "https://milk-products-dairy.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
