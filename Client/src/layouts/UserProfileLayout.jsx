@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import UserProfileSidebar from "../components/UserProfileSidebar";
@@ -9,7 +9,8 @@ import PropTypes from "prop-types"
 export default function UserProfileLayout({ children }) {
     const scrollRef = useRef(null);
     const location = useLocation();
-    const { authUser, authUserLoading, setOpenLoginDialog } = useContext(UserAuthContext);
+    const navigate = useNavigate()
+    const { authUser, authUserLoading } = useContext(UserAuthContext);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -32,7 +33,7 @@ export default function UserProfileLayout({ children }) {
         return (
             <div className="h-screen p-4 flex flex-col items-center justify-center text-center space-y-4 bg-[#F0F1F3] dark:bg-[#121212] text-black dark:text-white transition-colors duration-300">
                 <span className="text-red-500 font-medium">You must be logged in to access this page.</span>
-                <button onClick={() => setOpenLoginDialog(true)} className="px-4 py-2 bg-[#843E71] text-white rounded hover:bg-[#843E7190] transition">
+                <button onClick={() => navigate("/login")} className="px-4 py-2 bg-[#843E71] text-white rounded hover:bg-[#843E7190] transition">
                     Go to Login
                 </button>
             </div>

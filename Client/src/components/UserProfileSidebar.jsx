@@ -14,7 +14,7 @@ import { updateUserProfilePhoto } from "../services/userProfileService";
 import { enqueueSnackbar } from "notistack";
 import { LanguagesIcon } from "lucide-react";
 
-export default function UserProfileSidebar() {
+export default function UserProfileSidebar({ userProfileDrawer, setUserProfileDrawer }) {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -74,9 +74,11 @@ export default function UserProfileSidebar() {
 
     const handleLogout = () => {
         handleUserLogout();
-        setOpenLoginDialog(true);
         enqueueSnackbar("User Logged Out Successfully", { variant: "success" });
         navigate("/");
+        setOpenLoginDialog(true);
+        setUserProfileDrawer(false);
+        
     }
 
     const navigationLinks = [
@@ -88,9 +90,9 @@ export default function UserProfileSidebar() {
     ];
 
     return (
-        <aside className="scrollbar-hide border-y-15 border-white dark:border-transparent w-full h-full min-w-65 md:w-65 bg-white dark:bg-gray-500/20 p-4 shadow-md overflow-y-auto rounded-md transition-all duration-300">
+        <aside className="scrollbar-hide border-y-15 border-white dark:border-transparent w-full h-full min-w-65 md:w-65 bg-white dark:bg-gray-500/20 p-4 shadow-md overflow-y-auto rounded-md scroll-smooth transition-all duration-300">
             <div className="flex flex-col items-center mb-5 relative group">
-                <div className="relative w-24 h-24">
+                <div className="relative w-24 h-24 ">
                     <img
                         src={photoUrl || null}
                         alt={photoUrl}
@@ -111,10 +113,10 @@ export default function UserProfileSidebar() {
 
                     <label
                         htmlFor="profileImageInput"
-                        className={`absolute bottom-0 right-0 bg-white dark:bg-gray-800 border p-1 rounded-full transition ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                        className={`absolute bottom-0 right-0 bg-[#843E71] text-white dark:bg-gray-800 border p-1 rounded-full transition ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-[#824572] dark:hover:bg-gray-200 dark:hover:bg-gray-700"}`}
                         title="Edit Photo"
                     >
-                        <i className="fa-solid fa-pen-to-square text-sm" />
+                        <i className="fa-solid fa-pen-to-square text-sm " />
                     </label>
 
                     <input
@@ -154,6 +156,7 @@ export default function UserProfileSidebar() {
                     <Link
                         key={item.key}
                         to={item.key}
+                        onClick={userProfileDrawer ? () => setUserProfileDrawer(false) : null}
                         className={`w-full flex items-center gap-2 px-4 py-2 text-left rounded transition duration-300 ${location?.pathname === item.key ? "bg-[#843E71] text-white dark:bg-[#843E71]" : "hover:bg-[#D595C3] dark:hover:bg-[#843E71] text-black dark:text-white"}`}
                     >
                         {item.icon} {item.label}
@@ -168,7 +171,7 @@ export default function UserProfileSidebar() {
 
                 <button
                     onClick={handleLogout}
-                    className={`w-full flex items-center gap-2 mt-2 px-4 py-2 text-left rounded text-gray-800 dark:text-white transition duration-300 hover:bg-[#D595C3] dark:hover:bg-[#843E71]`}
+                    className={`w-full flex items-center gap-2 mt-2 px-4 py-2 text-left rounded text-red-600 dark:text-red-500 transition duration-300 hover:bg-red-600/30 dark:hover:bg-red-500/30`}
                 >
                     Log out <MdArrowForward />
                 </button>

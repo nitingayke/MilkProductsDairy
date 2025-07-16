@@ -90,8 +90,6 @@ export const loginUser = async (req, res) => {
 
 export const loginWithGoogle = async (req, res) => {
   let { token } = req.body;
-  console.log(token);
-
   if (!token) {
     return res.status(400).json({
       success: false,
@@ -106,7 +104,7 @@ export const loginWithGoogle = async (req, res) => {
   });
 
   const payload = ticket.getPayload();
-  const { email, name} = payload;
+  const { email, name } = payload;
 
   let user = await User.findOne({ email });
 
@@ -141,7 +139,6 @@ export const loginWithGoogle = async (req, res) => {
       user.mobileNo &&
       user.address
   );
-
 
   res.status(200).json({
     success: true,
@@ -310,12 +307,10 @@ export const resetPassword = async (req, res) => {
   }
 
   if (password !== confirmPassword) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "Password and confirmpassword must be same",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "Password and confirmpassword must be same",
+    });
   }
 
   const user = await User.findOne({ email: email });

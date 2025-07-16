@@ -17,7 +17,7 @@ export default function GoogleLoginComponent() {
     <GoogleLogin
       onSuccess={async (credentialResponse) => {
         try {
-          const res = await loginWithGoogle(credentialResponse.credential); // Send { token }
+          const res = await loginWithGoogle(credentialResponse.credential); 
 
           if (res?.success) {
 
