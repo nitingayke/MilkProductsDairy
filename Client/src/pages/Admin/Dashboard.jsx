@@ -32,9 +32,7 @@ export default function Dashboard() {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { duration: 0.4 } }
     };
-
-    console.log(allOrders)
-
+    
     return (
         <>
             <section className="p-3">

@@ -10,6 +10,7 @@ import OfferingCard from "../components/HomeComponents/OfferingCard";
 import OfferingProductCard from "../components/HomeComponents/OfferingProductCard";
 import { fetchRecentReviews } from "../services/productServices";
 import company from "../data/company.json";
+import MadhurLoader from "../components/MadhurLoader";
 
 const Marquee = lazy(() => import("react-fast-marquee"));
 const DairyProductsCarousel = lazy(() => import("../components/HomeComponents/DairyProductsCarousel"));
@@ -93,13 +94,13 @@ export default function HomePage() {
                             )}
 
                             <h1 className="text-lg sm:text-2xl md:text-7xl font-bold mb-4 bg-gradient-to-t from-[#00ce03] to-white bg-clip-text text-transparent drop-shadow-md">
-                                { company?.name }
+                                {company?.name}
                             </h1>
 
                             <p
                                 className="hidden sm:flex text-sm md:text-2xl max-w-2xl mx-auto justify-center text-gray-100"
                             >
-                                { company?.tagline }
+                                {company?.tagline}
                             </p>
                         </div>
                     </motion.div>

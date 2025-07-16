@@ -12,6 +12,7 @@ import { getAverageRating } from "../utils/averageRating";
 
 import { ProductContext } from "../context/ProductProvider";
 import { getRandomImage } from "../utils/imagePicker";
+import MadhurLoader from "../components/MadhurLoader";
 
 export default function ProductPage() {
 
@@ -62,12 +63,13 @@ export default function ProductPage() {
 
                 <div className="flex-1 space-y-5">
                     {productLoading ? (
-                        <div className="w-full flex justify-center text-gray-500 dark:text-gray-300 py-16 text-lg">
-                            <div className="w-fit flex items-center gap-3">
-                                <div className="w-8 h-8 border-4 border-dashed rounded-full animate-spin border-[#843E71]"></div>
-                                <p>Loading...</p>
-                            </div>
-                        </div>
+                        // <div className="w-full flex justify-center text-gray-500 dark:text-gray-300 py-16 text-lg">
+                        //     <div className="w-fit flex items-center gap-3">
+                        //         <div className="w-8 h-8 border-4 border-dashed rounded-full animate-spin border-[#843E71]"></div>
+                        //         <p>Loading...</p>
+                        //     </div>
+                        // </div>
+                        <MadhurLoader/>
                     ) : (
                         <>
                             <section

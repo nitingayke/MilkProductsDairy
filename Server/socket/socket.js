@@ -25,7 +25,7 @@ export const connectToSocket = (server) => {
     cors: {
       origin: [
         "http://localhost:5173",
-        "https://milk-products-dairy.vercel.app",
+        "https://milk-products-dairy-kappa.vercel.app",
       ],
       methods: ["GET", "POST", "DELETE", "PUT"],
     },

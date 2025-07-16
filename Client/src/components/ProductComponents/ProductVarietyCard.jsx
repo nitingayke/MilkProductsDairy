@@ -47,7 +47,7 @@ export default function ProductVarietyCard({ id, image, name, discount, rating, 
     const handleAddProduct = (productId, price) => {
 
         if (!authUser?._id) {
-            enqueueSnackbar("Please log in to add items to cart.", { variant: "error" });
+            enqueueSnackbar("Please log in to add items to cart.", { variant: "info" });
             setOpenLoginDialog(true);
             return;
         }

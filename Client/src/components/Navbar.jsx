@@ -185,7 +185,7 @@ export default function Navbar() {
                     </Link>
                 </div>
 
-                <div className="hidden lg:flex gap-2 ml-4">
+                <div className="hidden lg:flex gap-2 ml-4" >
                     {navItems.map((item, idx) =>
                         <Link key={idx * 0.5} to={item.path} className={`${linkStyle} ${location.pathname.startsWith(item.path) ? activeLinkStyle : ''}`}>
                             {item.label}
@@ -385,10 +385,12 @@ export default function Navbar() {
                 onClose={() => setUserProfileDrawer(false)}
                 onOpen={() => setUserProfileDrawer(true)}
                 className="md:hidden"
-                PaperProps={{
-                    sx: {
-                        width: '100%',
-                        backgroundColor: 'transparent',
+                slotProps={{
+                    paper: {
+                        sx: {
+                            width: '100%',
+                            backgroundColor: 'transparent',
+                        },
                     },
                 }}
             >
@@ -401,7 +403,7 @@ export default function Navbar() {
                         <X />
                     </button>
 
-                    <UserProfileSidebar />
+                    <UserProfileSidebar userProfileDrawer={userProfileDrawer} setUserProfileDrawer={setUserProfileDrawer}/>
                 </div>
             </SwipeableDrawer>
         </>

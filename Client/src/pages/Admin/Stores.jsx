@@ -39,7 +39,7 @@ export default function Stores() {
 
     const companyName = "Madhur Dairy & Daily Needs";
     const address = "Shed no. A-31, Datri Mala, Ambad, MIDC Ambad, Nashik, Maharashtra 422010";
-    const appLink = "https://milk-products-dairy.vercel.app/";
+    const appLink = "https://milk-products-dairy-kappa.vercel.app/";
 
     if (loading) {
         return (

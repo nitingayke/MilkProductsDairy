@@ -4,9 +4,20 @@ import { generateOtp, signupUser } from "../../../services/userService";
 import { useSnackbar } from "notistack";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import GoogleLogin from "./GoogleLogin";
 import company from "../../../data/company.json";
 import GoogleLoginComponent from "./GoogleLogin";
+
+const GoogleLoadingOverlay = () => (
+  <div className="absolute inset-0 z-50 dark:bg-black/30 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+    <div className="flex flex-col items-center">
+      <div className="relative w-12 h-12">
+        <div className="absolute w-full h-full border-4 border-t-blue-500 border-r-red-500 border-b-yellow-400 border-l-green-500 rounded-full animate-spin" />
+      </div>
+      <p className="mt-3 text-gray-800 dark:text-white font-medium text-sm">Logging in with Google...</p>
+    </div>
+  </div>
+);
+
 
 export default function UserSignUp() {
   const navigate = useNavigate();
@@ -14,7 +25,8 @@ export default function UserSignUp() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+    const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -62,13 +74,16 @@ export default function UserSignUp() {
   const loginType = "user"
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center px-4 py-8 bg-[#F0F1F3] dark:bg-[#121212] text-black dark:text-white transition-colors duration-300">
+    <div className="relative flex min-h-screen w-full items-center justify-center px-4 py-8 bg-[#F0F1F3] dark:bg-[#121212] text-black dark:text-white transition-colors duration-300">
+      {googleLoginLoading && <GoogleLoadingOverlay />}
+
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="p-6 bg-white dark:bg-gray-900 rounded-md w-lg">
+        className={`p-6 bg-white ${googleLoginLoading ? "opacity-50 blur-sm pointer-events-none select-none" : ""
+          } dark:bg-gray-900 rounded-md w-lg`}>
         <h2 className="text-lg font-semibold text-center text-gray-800 dark:text-gray-200">
           Welcome to
         </h2>
@@ -198,6 +213,7 @@ export default function UserSignUp() {
 
         {/* Social login */}
         <div className=" w-full flex justify-center pt-2">
+          <GoogleLoginComponent setGoogleLoginLoading={setGoogleLoginLoading} />
           <GoogleLoginComponent />
         </div>
       </motion.div>
